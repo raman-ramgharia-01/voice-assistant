@@ -25,7 +25,7 @@ class RAGSystem:
         """Send text to Groq API and get response"""
         try:
             client = Groq(
-                api_key='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'
+                api_key=os.getenv("GROQ_API_KEY")
             )
 
             chat_completion = client.chat.completions.create(
