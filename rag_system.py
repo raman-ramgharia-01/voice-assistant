@@ -8,6 +8,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from groq import Groq
 from dotenv import load_dotenv
 
+load_dotenv()
+
 class RAGSystem:
     def __init__(self):
         # Initialize model
@@ -18,14 +20,14 @@ class RAGSystem:
             self.df = joblib.load('normalize_data.joblib')
             print(f"DataFrame loaded. Shape: {self.df.shape}")
         except FileNotFoundError:
-            print("Error: 'normalize_data.joblib' not found")
+            print("Error: 'normalize_data_v2.joblib' not found")
             self.df = None
     
     def analyze_with_groq(self, text_data):
         """Send text to Groq API and get response"""
         try:
             client = Groq(
-                api_key=os.getenv("GROQ_API_KEY")
+                api_key = os.environ.get("GROQ_API_KEY")
             )
 
             chat_completion = client.chat.completions.create(
@@ -74,14 +76,24 @@ class RAGSystem:
             retrieved_context += self.df.iloc[idx]['text'] + "\n\n"
         
         # Create RAG prompt
-        rag_prompt = f"""Context:
-{retrieved_context}
-
-Based on the context above, answer this question: {user_query}
-
-If the context doesn't contain relevant information, say "I don't have enough information in the provided context to answer this question."
-
-Answer:"""
+        rag_prompt = f"""
+        [Role]
+        You are responding as Raman — the user. Use first-person ("I", "my", "me") naturally.
+        
+        [Context]
+        {retrieved_context}
+        
+        [Question from Rohan]
+        {user_query}
+        
+        [Rules]
+        - Answer **strictly based on the given context**.
+        - Write as if Rohan himself is speaking.
+        - If the context doesn't have enough info, say: "I don't have enough information to answer this based on what I know."
+        - Keep the tone personal, friendly, and genuine.
+        
+        [Rohan's Answer]
+        """
         
         # Save prompt (optional)
         with open("prompt.txt", 'w', encoding='utf-8') as f:
