@@ -10,12 +10,11 @@ from datetime import datetime
 
 # Page Config
 st.set_page_config(
-    page_title="Voice Assistant Pro",
+    page_title="Voice Assistant",
     page_icon="🎙️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
 # Get API key
 api_key = os.getenv("GROQ_API_KEY")
 
