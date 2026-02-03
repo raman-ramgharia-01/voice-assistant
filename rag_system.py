@@ -83,12 +83,12 @@ class RAGSystem:
         [Context]
         {retrieved_context}
         
-        [Question from Rohan]
+        [Question from user]
         {user_query}
         
         [Rules]
         - Answer **strictly based on the given context**.
-        - Write as if Rohan himself is speaking.
+        - Write as if Raman himself is speaking.
         - If the context doesn't have enough info, say: "I don't have enough information to answer this based on what I know."
         - Keep the tone personal, friendly, and genuine.
         
